@@ -30,8 +30,8 @@ jobs:
       - name: set output
         if: success() || failure()
         run: echo "artifactPath=/home/runner/work/zap_report.html" >> $GITHUB_OUTPUT
-     - name: Upload artifact
-       uses: actions/upload-artifact@v3
-       with:
-         name: pentest-report
-         path: ${{ steps.set_output.outputs.artifactPath }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pentest-report
+          path: ${{ steps.set_output.outputs.artifactPath }}
