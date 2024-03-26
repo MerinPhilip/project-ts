@@ -1,3 +1,19 @@
 name: dast analysis
-description: scan the application using zap tool
 
+on:
+  push:
+  workflow_call:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Download and run ZAP
+        uses: MerinPhilip/project-ts/DAST@main
+        with:
+          target_url: "http://34.105.229.136/"
+          
