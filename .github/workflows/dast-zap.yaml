@@ -1,4 +1,4 @@
-name: dast analysis
+name: zap dast scan
 
 on:
   workflow_dispatch:
@@ -11,8 +11,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Download and run ZAP
-        uses: MerinPhilip/project-ts/DAST@main
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.9.0
         with:
-          target_url: "http://34.105.229.136/"
-          
+          target: 'http://34.105.229.136/'          
