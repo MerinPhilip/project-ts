@@ -9,29 +9,24 @@ outputs:
   report_path:
     description: Path to the generated DAST report
 
-jobs:
-  rundast:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-
-    steps:
-      - name: code copy
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Download and run ZAP
-        run: |
-          wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1>Linux.tar.gz
-          tar -xvf ZAP_2.11.1_Linux.tar.gz
-          cd ZAP_2.11.1
-          ./zap.sh -cmd -quickurl ${{ inputs.target_url }} -quickprogress -quickout /home/runner/work/zap_report.html
-      - name: set output
-        if: success() || failure()
-        run: echo "artifactPath=/home/runner/work/zap_report.html" >> $GITHUB_OUTPUT
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: pentest-report
-          path: ${{ steps.set_output.outputs.artifactPath }}
+runs:
+  using: "composite"
+  steps:
+    - name: code copy
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Download and run ZAP
+      run: |
+        wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1>Linux.tar.gz
+        tar -xvf ZAP_2.11.1_Linux.tar.gz
+        cd ZAP_2.11.1
+        ./zap.sh -cmd -quickurl ${{ inputs.target_url }} -quickprogress -quickout /home/runner/work/zap_report.html
+    - name: set output
+      if: success() || failure()
+      run: echo "artifactPath=/home/runner/work/zap_report.html" >> $GITHUB_OUTPUT
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: pentest-report
+        path: ${{ steps.set_output.outputs.artifactPath }}
